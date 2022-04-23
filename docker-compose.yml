@@ -1,0 +1,30 @@
+version: '3.7'
+
+services:
+  db: 
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: whatever123
+    networks:
+      - base-network
+  api:
+    build: 
+      context: .
+      dockerfile: docker/base-api/Dockerfile
+    image: zidanlastone/base-api:0.1
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+    depends_on:
+      - db
+    networks:
+      - base-network
+
+networks:
+  base-network:
+    name: 'base-network'
+    

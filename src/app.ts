@@ -2,9 +2,26 @@ import { join } from 'path';
 import AutoLoad, {AutoloadPluginOptions} from 'fastify-autoload';
 import { FastifyPluginAsync } from 'fastify';
 
+import knexconfig from '../knexfile';
+import { Knex } from 'knex';
+
 export type AppOptions = {
+  knex: Knex
   // Place your custom options for app below here.
 } & Partial<AutoloadPluginOptions>;
+
+type env = keyof typeof knexconfig;
+
+/**
+ * Declaration merging
+ *  untuk melakukan merging terhadap interface yang sudah ada
+ *  dengan interface yang dibutuhkan
+ */
+declare module 'fastify' {
+  interface FastifyInstance {
+    knex: Knex
+  }
+}
 
 const app: FastifyPluginAsync<AppOptions> = async (
     fastify,
@@ -12,17 +29,10 @@ const app: FastifyPluginAsync<AppOptions> = async (
 ): Promise<void> => {
   // Place here your custom code!
 
+  const environtment = process.env.MODE !== null ? 'development' : process.env.MODE as env
   // knexjs connections
-  void fastify.register(require('fastify-knexjs'), {
-    client: 'mysql2',
-    connection: {
-      host: '127.0.0.1',
-      port: '3306',
-      user: 'root',
-      password: '',
-      database: 'base-database'
-    }
-  });
+  // later the knex connection can be accesed by using fastify.knex  
+  void fastify.register(require('fastify-knexjs'), knexconfig[environtment]);
 
   // Do not touch the following lines
 

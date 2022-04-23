@@ -1,0 +1,9 @@
+{
+  "title": "Headers Schema",
+  "type": "object",
+  "properties": {
+    "h-Custom": { "type": "string" }
+  },
+  "additionalProperties": false,
+  "required": ["h-Custom"]
+}

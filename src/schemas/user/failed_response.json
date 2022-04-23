@@ -1,0 +1,11 @@
+{
+  "title": "User Failed Response Schema",
+  "type": "object",
+  "properties": {
+    "fullname": { "type": "string" },
+    "email": { "type": "string" },
+    "password": { "type": "string" }
+  },
+  "additionalProperties": false,
+  "required": ["fullname", "email", "password"]
+}
